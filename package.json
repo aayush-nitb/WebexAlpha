@@ -20,7 +20,11 @@
     "express": "~3.1.0",
     "bower": "latest",
     "body-parser": "latest",
-    "mongoose": "latest"
+    "mongoose": "latest",
+    "wiredep": "latest",
+    "coffee-script": "latest",
+    "fs": "latest",
+    "walk": "latest"
   },
   "noAnalyze": true,
   "license": "Apache",
