@@ -24,7 +24,8 @@
     "wiredep": "latest",
     "coffee-script": "latest",
     "fs": "latest",
-    "walk": "latest"
+    "walk": "latest",
+    "less": "latest"
   },
   "noAnalyze": true,
   "license": "Apache",

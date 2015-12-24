@@ -10,6 +10,7 @@ var express = require('express')
   , fs = require('fs')
   , walk = require('walk')
   , coffee = require('coffee-script')
+  , less = require('less')
   , path = require('path');
 
 var controllers = walk.walk('./controllers', { followLinks: false });
@@ -20,6 +21,20 @@ controllers.on('file', function (root, stat, next) {
         var compiled = coffee.compile(data);
         fs.writeFile(outfile, compiled, function(err){
             if(!err) console.log("Compiled: " + filename + ", Output: " + outfile);
+        });
+    });
+    next();
+});
+
+var appearance = walk.walk('./appearance', { followLinks: false });
+appearance.on('file', function (root, stat, next) {
+    var filename = path.join(root, stat.name);
+    var outfile = path.join("public/stylesheets", stat.name + ".css");
+    fs.readFile(filename, 'utf8', function (err, data) {
+        less.render(data).then(function(compiled){
+           fs.writeFile(outfile, compiled.css, function(err){
+              if(!err) console.log("Compiled: " + filename + ", Output: " + outfile);
+           });
         });
     });
     next();
