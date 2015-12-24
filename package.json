@@ -25,7 +25,10 @@
     "coffee-script": "latest",
     "fs": "latest",
     "walk": "latest",
-    "less": "latest"
+    "less": "latest",
+    "http": "latest",
+    "path": "latest",
+    "mkdirp": "latest"
   },
   "noAnalyze": true,
   "license": "Apache",

@@ -1,2 +1,0 @@
-# CoffeeScript
-alert "hello"
