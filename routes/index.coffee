@@ -25,6 +25,6 @@ exports.configure = (app, fileProvider) ->
   getURL = fileProvider
   app.get '/', mainIndex
   app.get '/molecules/:molecule', moleculeIndex
-  app.get '/main/images/:image', mainImages
-  app.get '/molecules/:molecule/images/:image', moleculeImages
+  app.get '/public/main/images/:image', mainImages
+  app.get '/public/molecules/:molecule/images/:image', moleculeImages
   return
