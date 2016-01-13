@@ -16,10 +16,10 @@ var express = require('express')
     , path = require('path');
 
 var fileProvider = function(file){
-    if(file.endsWith(".less")){
+    if(file.match("\.less$")){
         return '/public/'+ this.base +'/appearance/' + file + '.css'
     }
-    if(file.endsWith(".coffee")){
+    if(file.match("\.coffee$")){
         return '/public/'+ this.base +'/controllers/' + file + '.js'
     }
 };
@@ -45,13 +45,13 @@ var write = function(compiled, root, outfile){
     var molecules = walk.walk(srcCode, {followLinks: false});
     molecules.on('file', function (root, stat, next) {
         var filename = path.join(root, stat.name);
-        if (stat.name.endsWith(".coffee")) {
+        if (stat.name.match("\.coffee$")) {
             render("js", filename, function(data, outfile){
                 var compiled = coffee.compile(data);
                 write(compiled, root, outfile);
             });
         }
-        if (stat.name.endsWith(".less")) {
+        if (stat.name.match("\.less$")) {
             render("css", filename, function(data, outfile){
                 less.render(data).then(function (compiled) {
                     write(compiled.css, root, outfile);
