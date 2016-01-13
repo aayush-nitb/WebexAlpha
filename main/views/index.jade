@@ -1,10 +1,10 @@
 extends layout
 
 block css
-  link(rel='stylesheet', href="#{url('style.less')}")
+  link(rel='stylesheet', href="#{url('appearance/style.less')}")
   
 block js
-  script(src="#{url('app.coffee')}")
+  script(src="#{url('controllers/app.coffee')}")
 
 block molecules
   link(rel="import", href="/molecules/app-seed")

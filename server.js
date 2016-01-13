@@ -16,11 +16,14 @@ var express = require('express')
     , path = require('path');
 
 var fileProvider = function(file){
-    if(file.match("\.less$")){
-        return '/public/'+ this.base +'/appearance/' + file + '.css'
+    if(file.match("^/?appearance/")){
+        return '/public/'+ this.base + '/' + file + '.css'
     }
-    if(file.match("\.coffee$")){
-        return '/public/'+ this.base +'/controllers/' + file + '.js'
+    if(file.match("^/?controllers/")){
+        return '/public/'+ this.base + '/' + file + '.js'
+    }
+    if(file.match("^/?images/")){
+        return '/' + this.base + '/' + file
     }
 };
 var render = function(type, filename, renderer){
@@ -61,27 +64,14 @@ var write = function(compiled, root, outfile){
         next();
     });
 });
+
 var app = express();
+app.set('port', process.env.PORT || 3000);
+app.set('views', __dirname);
+app.set('view engine', 'jade');
+app.use('/node_modules', express.static(path.join(__dirname, 'node_modules')));
+app.use('/bower_components', express.static(path.join(__dirname, 'bower_components')));
+app.use('/public', express.static(path.join(__dirname, 'public')));
 
-app.configure(function(){
-  app.set('port', process.env.PORT || 3000);
-  app.set('views', __dirname);
-  app.set('view engine', 'jade');
-  app.use(express.favicon());
-  app.use(express.logger('dev'));
-  app.use(express.bodyParser());
-  app.use(express.methodOverride());
-  app.use(app.router);
-  app.use('/node_modules', express.static(path.join(__dirname, 'node_modules')));
-  app.use('/bower_components', express.static(path.join(__dirname, 'bower_components')));
-  app.use('/public', express.static(path.join(__dirname, 'public')));
-});
-
-app.configure('development', function(){
-  app.use(express.errorHandler());
-});
 routes.configure(app, fileProvider);
-
-http.createServer(app).listen(app.get('port'), function(){
-  console.log("Express server listening on port " + app.get('port'));
-});
+app.listen(3000);
