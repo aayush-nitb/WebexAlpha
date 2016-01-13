@@ -23,7 +23,7 @@ var fileProvider = function(file){
         return '/public/'+ this.base + '/' + file + '.js'
     }
     if(file.match("^/?images/")){
-        return '/' + this.base + '/' + file
+        return '/public/' + this.base + '/' + file
     }
 };
 var render = function(type, filename, renderer){
