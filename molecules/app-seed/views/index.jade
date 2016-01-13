@@ -1,8 +1,14 @@
-link(rel="import", href="/bower_components/polymer/polymer.html")
-dom-module#app-seed
-    template
-        link(rel="stylesheet", href="#{url('style.less')}")
-        h2.page-title {{greeting}}
-        span.paper-font-body2 Update text to change the greeting.
-        input.paper-font-body2(value="{{greeting::input}}")
-    script(src="#{url('script.coffee')}")
+extends layout
+
+block css
+  link(rel="stylesheet", href="#{url('style.less')}")
+  
+block js
+  script(src="#{url('script.coffee')}")
+  
+block molecules
+
+block content
+  h2.page-title {{greeting}}
+  span.paper-font-body2 Update text to change the greeting.
+  input.paper-font-body2(value="{{greeting::input}}")
