@@ -74,4 +74,7 @@ app.use('/bower_components', express.static(path.join(__dirname, 'bower_componen
 app.use('/public', express.static(path.join(__dirname, 'public')));
 
 routes.configure(app, fileProvider);
-app.listen(3000);
+
+app.listen(app.get('port'), function(){
+  console.log("Express server listening on port " + app.get('port'));
+});
