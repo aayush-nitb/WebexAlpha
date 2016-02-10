@@ -1,4 +1,5 @@
 path = require 'path'
+auth = require '../molecules/app-login/controllers/login.coffee'
 
 appRoot = path.resolve "."
 getURL = undefined
@@ -27,4 +28,9 @@ exports.configure = (app, fileProvider) ->
   app.get '/molecules/:molecule', moleculeIndex
   app.get '/public/main/images/:image', mainImages
   app.get '/public/molecules/:molecule/images/:image', moleculeImages
+  app.get '/test', auth, (req, res) ->
+    res.json
+        success: true
+        error: false
+    return
   return

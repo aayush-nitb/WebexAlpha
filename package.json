@@ -16,11 +16,14 @@
     "express"
   ],
   "dependencies": {
+    "MD5": "^1.2.2",
+    "basic-auth": "^1.0.2",
+    "just.randomstring": "^0.1.1",
     "jade": "latest",
     "express": "latest",
     "bower": "latest",
     "body-parser": "latest",
-    "mongoose": "latest",
+    "mongoskin": "latest",
     "wiredep": "latest",
     "coffee-script": "latest",
     "fs": "latest",
