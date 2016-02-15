@@ -26,12 +26,14 @@ var fileProvider = function(file){
         return '/public/' + this.base + '/' + file
     }
 };
+
 var render = function(type, filename, renderer){
     var outfile = path.join("public", filename + "." + type);
     fs.readFile(filename, 'utf8', function (err, data) {
         renderer(data, outfile);
     });
 };
+
 var write = function(compiled, root, outfile){
     root = path.join("public", root);
     mkdirp(root, function (err) {
@@ -44,26 +46,24 @@ var write = function(compiled, root, outfile){
     });
 };
 
-["main", "molecules"].forEach(function(srcCode){
-    var molecules = walk.walk(srcCode, {followLinks: false});
-    molecules.on('file', function (root, stat, next) {
-        var filename = path.join(root, stat.name);
-        if (stat.name.match("\.coffee$")) {
-            render("js", filename, function(data, outfile){
-                var compiled = coffee.compile(data);
-                write(compiled, root, outfile);
-            });
-        }
-        if (stat.name.match("\.less$")) {
-            render("css", filename, function(data, outfile){
-                less.render(data).then(function (compiled) {
-                    write(compiled.css, root, outfile);
-                });
-            });
-        }
-        next();
-    });
-});
+var fileRegex = function (molecule, dir, ext, file) {
+    var path_array = [];
+    var pathsep = '\\' + path.sep;
+    if (molecule == 'molecules') {
+        path_array.push('molecules' + pathsep + '([^' + pathsep + ']+)');
+    }
+    else {
+        path_array.push(molecule);
+    }
+    path_array.push(dir);
+    if (file) {
+        path_array.push(file + '\.' + ext);
+    }
+    else {
+        path_array.push('.+\\.' + ext);
+    }
+    return "^" + path_array.join(pathsep) + "$";
+};
 
 var app = express();
 app.set('port', process.env.PORT || 3000);
@@ -72,6 +72,42 @@ app.set('view engine', 'jade');
 app.use('/node_modules', express.static(path.join(__dirname, 'node_modules')));
 app.use('/bower_components', express.static(path.join(__dirname, 'bower_components')));
 app.use('/public', express.static(path.join(__dirname, 'public')));
+
+var mainAppearance = fileRegex("main", "appearance", "less");
+var moleculeAppearance = fileRegex("molecules", "appearance", "less");
+var mainController = fileRegex("main", "controllers", "coffee");
+var moleculeController = fileRegex("molecules", "controllers", "coffee");
+var mainService = fileRegex("main", "services", "coffee", "index");
+var moleculeService = fileRegex("molecules", "services", "coffee", "index");
+
+["main", "molecules"].forEach(function (srcCode) {
+    var molecules = walk.walk(srcCode, { followLinks: false });
+    molecules.on('file', function (root, stat, next) {
+        var filename = path.join(root, stat.name);
+        if (filename.match(mainController) || filename.match(moleculeController)) {
+            render("js", filename, function (data, outfile) {
+                var compiled = coffee.compile(data);
+                write(compiled, root, outfile);
+            });
+        }
+        if (filename.match(mainAppearance) || filename.match(moleculeAppearance)) {
+            render("css", filename, function (data, outfile) {
+                less.render(data).then(function (compiled) {
+                    write(compiled.css, root, outfile);
+                });
+            });
+        }
+        if (filename.match(mainService)) {
+            app.use("/", require("./main/services/index"));
+        }
+        if (filename.match(moleculeService)) {
+            var service_path = new RegExp(moleculeService);
+            var match = service_path.exec(filename);
+            app.use("/molecules/" + match[1], require("./molecules/" + match[1] + "/services/index"));
+        }
+        next();
+    });
+});
 
 routes.configure(app, fileProvider);
 
