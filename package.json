@@ -31,7 +31,8 @@
     "less": "latest",
     "http": "latest",
     "path": "latest",
-    "mkdirp": "latest"
+    "mkdirp": "latest",
+    "rfr": "latest"
   },
   "noAnalyze": true,
   "license": "Apache",

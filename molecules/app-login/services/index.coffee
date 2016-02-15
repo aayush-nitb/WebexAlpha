@@ -2,7 +2,7 @@ express = require 'express'
 rfr = require 'rfr'
 router = express.Router()
 
-auth = rfr 'molecules/app-login/services/login'
+auth = require './login'
 
 router.get '/test', auth, (req, res) ->
     res.json
