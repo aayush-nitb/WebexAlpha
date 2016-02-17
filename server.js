@@ -80,6 +80,11 @@ var moleculeController = fileRegex("molecules", "controllers", "coffee");
 var mainService = fileRegex("main", "services", "coffee", "index");
 var moleculeService = fileRegex("molecules", "services", "coffee", "index");
 
+var mainAppearance_rendered = fileRegex("main", "appearance", "css");
+var moleculeAppearance_rendered = fileRegex("molecules", "appearance", "css");
+var mainController_rendered = fileRegex("main", "controllers", "js");
+var moleculeController_rendered = fileRegex("molecules", "controllers", "js");
+
 ["main", "molecules"].forEach(function (srcCode) {
     var molecules = walk.walk(srcCode, { followLinks: false });
     molecules.on('file', function (root, stat, next) {
@@ -104,6 +109,16 @@ var moleculeService = fileRegex("molecules", "services", "coffee", "index");
             var service_path = new RegExp(moleculeService);
             var match = service_path.exec(filename);
             app.use("/molecules/" + match[1], require("./molecules/" + match[1] + "/services/index"));
+        }
+        if (filename.match(mainController_rendered) || filename.match(moleculeController_rendered)) {
+            render("js", filename, function (data, outfile) {
+                write(data, root, outfile);
+            });
+        }
+        if (filename.match(mainAppearance_rendered) || filename.match(moleculeAppearance_rendered)) {
+            render("css", filename, function (data, outfile) {
+                write(data, root, outfile);
+            });
         }
         next();
     });

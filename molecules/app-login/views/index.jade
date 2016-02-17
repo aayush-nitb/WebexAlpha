@@ -3,6 +3,8 @@ extends layout
 block css
   
 block js
+  script(src="#{url('controllers/md5.js')}")
+  script(src="#{url('controllers/Base64.js')}")
   script(src="#{url('controllers/script.coffee')}")
   
 block molecules
