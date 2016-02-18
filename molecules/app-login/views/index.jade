@@ -1,12 +1,36 @@
 extends layout
 
 block css
-  
+    style.
+        :host{
+            display:block;
+            width:350px;
+        }
+        .panel-heading{
+            text-align:center;
+        }
+        .input-group{
+            margin-bottom:20px;
+        }
+        .btn{
+            width:100%;
+        }
+
 block js
-  script(src="#{url('controllers/md5.js')}")
-  script(src="#{url('controllers/Base64.js')}")
-  script(src="#{url('controllers/script.coffee')}")
-  
+    script(src="#{url('controllers/md5.js')}")
+    script(src="#{url('controllers/Base64.js')}")
+    script(src="#{url('controllers/script.coffee')}")
+
 block molecules
 
 block content
+    .panel.panel-primary
+        .panel-heading LOGIN
+        .panel-body
+            .input-group
+                span.input-group-addon @
+                input.form-control#username(placeholder="Username")
+            .input-group
+                span.input-group-addon ***
+                input.form-control#password(placeholder="Password", type="password")
+            button.btn.btn-success(type="submit", on-click="_uiLogin") Sign In

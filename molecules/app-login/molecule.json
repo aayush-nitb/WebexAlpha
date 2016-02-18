@@ -1,0 +1,18 @@
+{
+  "name": "app-login",
+  "version": "0.0.1",
+  "description": "It provides server login and signup functionality. It remembers login for 24hrs at server end. All passwords and tokens are encrypted, so that the session is secured.",
+  "author": "aayush.nitb@gmail.com",
+  "dependencies": {},
+  "attrs": {},
+  "events": {},
+  "methods": {
+    "login(user, password)": "This will open a user session at server end for 24 hrs.",
+    "authorize(success, failure, binding)": "All client side user-specific functions must go through this function. If the user is logged-in, then success(binding) is called else failure(binding) is called. You may skip these args if corresponding methods are already registered via registerSuccess(callback) and registerFailure(callback) methods.",
+    "logout()": "This will close the user session at server end.",
+    "getUser()": "Returns the current logged-in user.",
+    "getAuth()": "Returns the auth token of current logged-in user. All user-specific rest calls must include this token for authentication at server end.",
+    "registerSuccess(callback)": "This will register a success callback for authorize method, so that success arg can be skipped while calling authorize method.",
+    "registerFailure(callback)": "This will register a failure callback for authorize method, so that failure arg can be skipped while calling authorize method."
+  }
+}
