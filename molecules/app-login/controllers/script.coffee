@@ -11,7 +11,7 @@ Polymer
         
     ### @private ###
     _uiLogin: () ->
-        this._login $(this).find("#username").val() $(this).find("#password").val()
+        this.login $(this).find("#username").val(), $(this).find("#password").val()
         this
 
     ### @private ###
