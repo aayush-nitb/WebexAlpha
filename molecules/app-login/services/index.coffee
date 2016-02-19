@@ -2,7 +2,6 @@ express = require 'express'
 basicAuth = require 'basic-auth'
 rfr = require 'rfr'
 mongo = require 'mongoskin'
-model = require '../models/login'
 auth = require './login'
 
 router = express.Router()
@@ -14,6 +13,7 @@ router.get '/test', auth, (req, res) ->
     return
 
 router.get '/logout', auth, (req, res) ->
+    model = rfr req.query.model
     db = mongo.db "mongodb://" + model.server + "/" + model.db, native_parser:true
     user = basicAuth req
     db.collection(model.collection).update {'user':user.name}

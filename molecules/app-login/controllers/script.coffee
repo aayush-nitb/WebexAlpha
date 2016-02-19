@@ -59,6 +59,7 @@ Polymer
         app = this
         test = $.ajax
             url: "/molecules/app-login/test",
+            data: {model: this.model},
             crossDomain: true,
             cache: false,
             headers: {Authorization: app._auth}
@@ -78,6 +79,7 @@ Polymer
         app = this
         test = $.ajax
             url: "/molecules/app-login/logout",
+            data: {model: this.model},
             crossDomain: true,
             cache: false,
             headers: {Authorization: app._auth}
@@ -123,4 +125,9 @@ Polymer
             ), ->
                 this._user = "null"
                 this._auth = ""
-            
+    
+    properties:
+        model:
+            type: String
+            value: "molecules/app-login/models/login"
+            notify: true

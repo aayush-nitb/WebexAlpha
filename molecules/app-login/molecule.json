@@ -4,7 +4,16 @@
   "description": "It provides server login and signup functionality. It remembers login for 24hrs at server end. All passwords and tokens are encrypted, so that the session is secured.",
   "author": "aayush.nitb@gmail.com",
   "dependencies": {},
-  "attrs": {},
+  "attrs": {
+    "model": ["string", "molecules/app-login/models/login", "Optional json path wrt app root, to specify db details."]
+  },
+  "model": {
+    "server": ["string", "localhost:27017", "Name of server where db is hosted."],
+    "db": ["string", "webexpress", "Name of database."],
+    "db_user": ["string", "root", "Username for connecting db."],
+    "db_pass": ["string", "", "Password for connecting db."],
+    "collection": ["string", "users", "Name of collection where user objects should be stored."]
+  },
   "events": {},
   "methods": {
     "login(user, password)": "This will open a user session at server end for 24 hrs.",
@@ -14,5 +23,8 @@
     "getAuth()": "Returns the auth token of current logged-in user. All user-specific rest calls must include this token for authentication at server end.",
     "registerSuccess(callback)": "This will register a success callback for authorize method, so that success arg can be skipped while calling authorize method.",
     "registerFailure(callback)": "This will register a failure callback for authorize method, so that failure arg can be skipped while calling authorize method."
+  },
+  "middlewares": {
+    "molecules/app-login/services/login": "Include this file in your service handler to go through authentication."
   }
 }

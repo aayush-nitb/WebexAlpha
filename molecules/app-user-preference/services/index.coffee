@@ -4,7 +4,7 @@ router = express.Router()
 
 auth = rfr 'molecules/app-login/services/login'
 
-router.get '/test', auth, (req, res) ->
+router.get '/getPreferences', auth, (req, res) ->
     res.json
         success: true
         error: false

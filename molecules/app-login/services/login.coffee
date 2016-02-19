@@ -1,10 +1,11 @@
 randomstring = require 'just.randomstring'
 basicAuth = require 'basic-auth'
+rfr = require 'rfr'
 md5 = require 'MD5'
 mongo = require 'mongoskin'
-model = require '../models/login'
 
 module.exports = (req, res, next) ->
+  model = rfr req.query.model
 
   TTL = 24 * 3600000
   #time-to-live is one day

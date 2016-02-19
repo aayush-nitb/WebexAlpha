@@ -1,0 +1,13 @@
+{
+  "name": "app-user-preferences",
+  "version": "0.0.1",
+  "description": "Basic example of user specific objects stored on server and displayed on ui.",
+  "author": "aayush.nitb@gmail.com",
+  "dependencies": {
+    "app-login": "0.0.1"
+  },
+  "attrs": {},
+  "events": {},
+  "methods": {},
+  "middlewares": {}
+}
