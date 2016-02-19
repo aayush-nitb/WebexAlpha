@@ -2,6 +2,7 @@
   "name": "WebExpress",
   "dependencies": {
     "jquery": "latest",
+    "jquery-ui": "latest",
     "angular": "latest",
     "angular-resource": "latest",
     "angular-cookies": "latest",

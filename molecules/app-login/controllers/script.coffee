@@ -11,55 +11,84 @@ Polymer
         
     ### @private ###
     _uiLogin: () ->
-        this.login $(this).find("#username").val(), $(this).find("#password").val()
-        this
-
-    ### @private ###
-    _login: (authUser, authToken) ->
-        if authUser and authToken
-            auth = Base64.encode authUser + ':' + authToken
-            this._auth = 'Basic ' + auth
+        if this._user is 'null'
+            this.login $(this).find("#username").val(), $(this).find("#password").val()
         else
-            authUser = localStorage.getItem "auth.user"
-            authToken = localStorage.getItem "auth.token"
-            if authUser and authToken
-                this._user = authUser
-                auth = Base64.encode authUser + ':' + authToken
-                this._auth = 'Basic ' + auth
+            this.logout()
         this
 
     ### @private ###
-    _loginByToken: (token) ->
-        if token
-            localStorage.setItem "auth.token", token
-            this._login()
+    _logoutWindow: () ->
+        $(this).find("#username").val this._user
+        $(this).find("#password").val "****"
+        $(this).find("#login").text "Sign Out"
+        $(this).find("#login").switchClass "btn-success", "btn-danger"
+        $(this).find("#username").prop "disabled", true
+        $(this).find("#password").prop "disabled", true
+        this
+
+    ### @private ###
+    _loginWindow: () ->
+        $(this).find("#username").val ""
+        $(this).find("#password").val ""
+        $(this).find("#login").text "Sign In"
+        $(this).find("#login").switchClass "btn-danger", "btn-success"
+        $(this).find("#username").prop "disabled", false
+        $(this).find("#password").prop "disabled", false
         this
 
     ### @public ###
     login: (user, password) ->
-        localStorage.setItem "auth.user", user
-        this._login user, CryptoJS.MD5(password)
+        if this._loading is true then return this
+        old_user = this._user
+        old_auth = this._auth
+        this._user = user
+        this._auth = 'Basic ' + Base64.encode(user + ':' + CryptoJS.MD5(password))
+        this.authorize (->
+            localStorage.setItem "auth.user", user
+            localStorage.setItem "auth.token", this._auth
+            this._logoutWindow()
+        ), ->
+            this._user = old_user
+            this._auth = old_auth
         this
 
     ### @public ###
     authorize: (success, failure, binding) ->
+        this._loading = true
+        app = this
         test = $.ajax
             url: "/molecules/app-login/test",
             crossDomain: true,
-            headers: {Authorization: this._auth}
+            cache: false,
+            headers: {Authorization: app._auth}
         test.done (data, status, xhr) ->
-            this._loginByToken xhr.getResponseHeader("auth-token")
-            if success then success(binding) else this._defaultSuccess()
+            token = xhr.getResponseHeader("auth-token")
+            if token then this._auth = 'Basic ' + Base64.encode(this._user + ':' + token)
+            if success then success.bind(app)(binding) else app._defaultSuccess()
         test.fail () ->
-            if failure then failure(binding) else this._defaultFailure()
+            if failure then failure.bind(app)(binding) else app._defaultFailure()
+        test.always () ->
+            app._loading = false
         this
 
     ### @public ###
     logout: () ->
-        localStorage.setItem "auth.user", ""
-        localStorage.setItem "auth.token", ""
-        this._auth = ""
-        this._user = "null"
+        this._loading = true
+        app = this
+        test = $.ajax
+            url: "/molecules/app-login/logout",
+            crossDomain: true,
+            cache: false,
+            headers: {Authorization: app._auth}
+        test.done (data, status, xhr) ->
+            localStorage.setItem "auth.user", ""
+            localStorage.setItem "auth.token", ""
+            app._auth = ""
+            app._user = "null"
+            app._loginWindow()
+        test.always () ->
+            app._loading = false
         this
 
     ### @public ###
@@ -82,6 +111,16 @@ Polymer
 
     ### @override ###
     ready: () ->
-        this._auth = ""
         this._user = "null"
-        this._login()
+        this._auth = ""
+        authUser = localStorage.getItem "auth.user"
+        authToken = localStorage.getItem "auth.token"
+        if authUser and authToken
+            this._user = authUser
+            this._auth = authToken
+            this.authorize (->
+                this._logoutWindow()
+            ), ->
+                this._user = "null"
+                this._auth = ""
+            
