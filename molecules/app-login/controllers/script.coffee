@@ -22,7 +22,7 @@ Polymer
         $(this).find("#username").val this._user
         $(this).find("#password").val "****"
         $(this).find("#login").text "Sign Out"
-        $(this).find("#login").switchClass "btn-success", "btn-danger"
+        $(this).find("#login").animateCss('pulse').switchClass "btn-success", "btn-danger", 0
         $(this).find("#username").prop "disabled", true
         $(this).find("#password").prop "disabled", true
         this
@@ -32,7 +32,7 @@ Polymer
         $(this).find("#username").val ""
         $(this).find("#password").val ""
         $(this).find("#login").text "Sign In"
-        $(this).find("#login").switchClass "btn-danger", "btn-success"
+        $(this).find("#login").animateCss('pulse').switchClass "btn-danger", "btn-success", 0
         $(this).find("#username").prop "disabled", false
         $(this).find("#password").prop "disabled", false
         this
@@ -51,6 +51,7 @@ Polymer
         ), ->
             this._user = old_user
             this._auth = old_auth
+            $(this).find(".panel").animateCss 'flash'
         this
 
     ### @public ###

@@ -1,24 +1,17 @@
 extends layout
 
 block css
+    link(rel="stylesheet", href="#{url('appearance/animate.css')}")
     style.
-        :host{
-            display:block;
-            width:350px;
-        }
-        .panel-heading{
-            text-align:center;
-        }
-        .input-group{
-            margin-bottom:20px;
-        }
-        .btn{
-            width:100%;
-        }
+        :host{display:block;width:350px;}
+        .panel-heading{text-align:center;}
+        .input-group{margin-bottom:20px;}
+        .btn{width:100%;}
 
 block js
     script(src="#{url('controllers/md5.js')}")
     script(src="#{url('controllers/Base64.js')}")
+    script(src="#{url('controllers/animate.js')}")
     script(src="#{url('controllers/script.coffee')}")
 
 block molecules

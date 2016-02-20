@@ -14,7 +14,9 @@ router.get '/test', auth, (req, res) ->
 
 router.get '/logout', auth, (req, res) ->
     model = rfr req.query.model
-    db = mongo.db "mongodb://" + model.server + "/" + model.db, native_parser:true
+    db_auth = if model.db_user is "" then "" else model.db_user + ":" + model.db_pass
+    db_url = db_auth + "@" + model.server + "/" + model.db
+    db = mongo.db "mongodb://" + db_url, native_parser:true
     user = basicAuth req
     db.collection(model.collection).update {'user':user.name}
       , $set:
