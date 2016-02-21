@@ -1,0 +1,7 @@
+{
+  "server": "localhost:27017",
+  "db": "webexpress",
+  "db_user": "",
+  "db_pass": "",
+  "collection": "user-preference"
+}

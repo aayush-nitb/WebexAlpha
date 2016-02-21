@@ -2,23 +2,19 @@ express = require 'express'
 basicAuth = require 'basic-auth'
 rfr = require 'rfr'
 mongo = require 'mongoskin'
-auth = require './login'
+login = require './login'
+models = rfr 'models'
 
 router = express.Router()
 
-router.get '/test', auth, (req, res) ->
+router.get '/test', login.auth, (req, res) ->
     res.json
         success: true
         error: false
     return
 
-router.get '/logout', auth, (req, res) ->
-    model = rfr req.query.model
-    db_auth = if model.db_user is "" then "" else model.db_user + ":" + model.db_pass
-    db_url = db_auth + "@" + model.server + "/" + model.db
-    db = mongo.db "mongodb://" + db_url, native_parser:true
-    user = basicAuth req
-    db.collection(model.collection).update {'user':user.name}
+router.get '/logout', login.auth, (req, res) ->
+    models(req).db().update {'user': login.user()}
       , $set:
           'token': ''
       , (err, records) ->

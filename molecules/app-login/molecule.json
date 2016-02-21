@@ -24,7 +24,12 @@
     "registerSuccess(callback)": "This will register a success callback for authorize method, so that success arg can be skipped while calling authorize method.",
     "registerFailure(callback)": "This will register a failure callback for authorize method, so that failure arg can be skipped while calling authorize method."
   },
-  "middlewares": {
-    "molecules/app-login/services/login": "Include this file in your service handler to go through authentication."
-  }
+  "services": [{
+    "name": "login.coffee",
+    "description": "Include this file in your service handler to get authentication methods.",
+    "methods": {
+        "auth(req, res, next)": "This is a middleware method for node express module. The next callback is called only when basic auth is matched against the db.",
+        "user()": "Returns the username of current logged-in user."
+    }
+  }]
 }
