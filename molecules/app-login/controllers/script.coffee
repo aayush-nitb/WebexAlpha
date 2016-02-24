@@ -2,11 +2,11 @@ Polymer
     is: 'app-login'
 
     ### @private ###
-    _defaultSuccess: () ->
+    _defaultSuccess: (data, status, xhr) ->
         return
 
     ### @private ###
-    _defaultFailure: () ->
+    _defaultFailure: (xhr, status, err) ->
         return
         
     ### @private ###
@@ -40,58 +40,57 @@ Polymer
     ### @public ###
     login: (user, password) ->
         if this._loading is true then return this
+        app = this
         old_user = this._user
         old_auth = this._auth
         this._user = user
         this._auth = 'Basic ' + Base64.encode(user + ':' + CryptoJS.MD5(password))
-        this.authorize (->
+        test = this.authorize url: "/molecules/app-login/test"
+        test.done (data, status, xhr) ->
+            token = xhr.getResponseHeader("auth-token")
+            if token then app._auth = 'Basic ' + Base64.encode(app._user + ':' + token)
             localStorage.setItem "auth.user", user
-            localStorage.setItem "auth.token", this._auth
-            this._logoutWindow()
-        ), ->
-            this._user = old_user
-            this._auth = old_auth
-            $(this).find(".panel").animateCss 'flash'
+            localStorage.setItem "auth.token", app._auth
+            app._logoutWindow()
+            return
+        test.fail () ->
+            app._user = old_user
+            app._auth = old_auth
+            $(app).find(".panel").animateCss 'flash'
+            return
         this
 
     ### @public ###
-    authorize: (success, failure, binding) ->
+    authorize: (req) ->
         this._loading = true
         app = this
-        test = $.ajax
-            url: "/molecules/app-login/test",
-            data: {model: this.model},
-            crossDomain: true,
-            cache: false,
-            headers: {Authorization: app._auth}
+        req.crossDomain = true
+        req.cache = false
+        req.headers = $.extend {Authorization: this._auth, 'app-login': this.model}, req.headers
+        test = $.ajax req
         test.done (data, status, xhr) ->
-            token = xhr.getResponseHeader("auth-token")
-            if token then this._auth = 'Basic ' + Base64.encode(this._user + ':' + token)
-            if success then success.bind(app)(binding) else app._defaultSuccess()
-        test.fail () ->
-            if failure then failure.bind(app)(binding) else app._defaultFailure()
+            app._defaultSuccess data, status, xhr
+            return
+        test.fail (xhr, status, err) ->
+            app._defaultFailure xhr, status, err
+            return
         test.always () ->
             app._loading = false
-        this
+            return
+        test
 
     ### @public ###
     logout: () ->
         this._loading = true
         app = this
-        test = $.ajax
-            url: "/molecules/app-login/logout",
-            data: {model: this.model},
-            crossDomain: true,
-            cache: false,
-            headers: {Authorization: app._auth}
-        test.done (data, status, xhr) ->
+        test = this.authorize url: "/molecules/app-login/logout"
+        test.done () ->
             localStorage.setItem "auth.user", ""
             localStorage.setItem "auth.token", ""
             app._auth = ""
             app._user = "null"
             app._loginWindow()
-        test.always () ->
-            app._loading = false
+            return
         this
 
     ### @public ###
@@ -114,6 +113,7 @@ Polymer
 
     ### @override ###
     ready: () ->
+        app = this
         this._user = "null"
         this._auth = ""
         authUser = localStorage.getItem "auth.user"
@@ -121,11 +121,15 @@ Polymer
         if authUser and authToken
             this._user = authUser
             this._auth = authToken
-            this.authorize (->
-                this._logoutWindow()
-            ), ->
-                this._user = "null"
-                this._auth = ""
+            test = this.authorize url: "/molecules/app-login/test"
+            test.done () ->
+                app._logoutWindow()
+                return
+            test.fail () ->
+                app._user = "null"
+                app._auth = ""
+                return
+        return
     
     properties:
         model:

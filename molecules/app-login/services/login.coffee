@@ -18,7 +18,7 @@ exports.auth = (req, res, next) ->
 
   authorize = (username, password) ->
     token = md5 randomstring()
-    loginModel.db().update {'user':username}
+    db.update {'user':username}
       , $set:
           'password': password
           'token': token
@@ -31,14 +31,14 @@ exports.auth = (req, res, next) ->
             unauthorized res
     return
 
-  loginModel = models req
+  db = models(req.get 'app-login').db()
   user = basicAuth req
 
   if not user or not user.name or not user.pass
     return unauthorized(res)
 
   try
-    loginModel.db().findOne {'user':user.name}
+    db.findOne {'user':user.name}
     , (err, item) ->
         if not item then return unauthorized(res)
         if not item.password then return authorize(user.name, user.pass)

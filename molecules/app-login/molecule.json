@@ -17,12 +17,12 @@
   "events": {},
   "methods": {
     "login(user, password)": "This will open a user session at server end for 24 hrs.",
-    "authorize(success, failure, binding)": "All client side user-specific functions must go through this function. If the user is logged-in, then success(binding) is called else failure(binding) is called. You may skip these args if corresponding methods are already registered via registerSuccess(callback) and registerFailure(callback) methods.",
+    "authorize(req)": "This is a wrapper of jquery ajax function containing in-built headers for authentication. It returns jqXHR object. req is ajax settings.",
     "logout()": "This will close the user session at server end.",
     "getUser()": "Returns the current logged-in user.",
     "getAuth()": "Returns the auth token of current logged-in user. All user-specific rest calls must include this token for authentication at server end.",
-    "registerSuccess(callback)": "This will register a success callback for authorize method, so that success arg can be skipped while calling authorize method.",
-    "registerFailure(callback)": "This will register a failure callback for authorize method, so that failure arg can be skipped while calling authorize method."
+    "registerSuccess(callback)": "This will register a success callback for authorize method.",
+    "registerFailure(callback)": "This will register a failure callback for authorize method."
   },
   "services": [{
     "name": "login.coffee",

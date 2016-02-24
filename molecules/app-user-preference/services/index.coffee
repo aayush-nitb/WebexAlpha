@@ -6,8 +6,9 @@ router = express.Router()
 login = rfr 'molecules/app-login/services/login'
 
 router.get '/getPreferences', login.auth, (req, res) ->
-    models(req).db().find {user: login.user()}, (err, records) ->
-        res.json records
+    db = models(req.get 'app-user-preference').db()
+    db.find(user: login.user()).toArray (err, result) ->
+        res.json result
     return
 
 module.exports = router

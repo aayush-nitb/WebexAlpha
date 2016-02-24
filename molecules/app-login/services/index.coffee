@@ -14,7 +14,8 @@ router.get '/test', login.auth, (req, res) ->
     return
 
 router.get '/logout', login.auth, (req, res) ->
-    models(req).db().update {'user': login.user()}
+    db = models(req.get 'app-login').db()
+    db.update {'user': login.user()}
       , $set:
           'token': ''
       , (err, records) ->
