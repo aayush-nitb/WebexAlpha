@@ -39,7 +39,9 @@ Polymer
 
     ### @public ###
     login: (user, password) ->
-        if this._loading is true then return this
+        if this._loading then return this
+        this._loading = true
+        this.fire "app-login.loading"
         app = this
         old_user = this._user
         old_auth = this._auth
@@ -49,20 +51,23 @@ Polymer
         test.done (data, status, xhr) ->
             token = xhr.getResponseHeader("auth-token")
             if token then app._auth = 'Basic ' + Base64.encode(app._user + ':' + token)
-            localStorage.setItem "auth.user", user
-            localStorage.setItem "auth.token", app._auth
-            app._logoutWindow()
+            localStorage.setItem "auth." + app.sessionName + ".user", user
+            localStorage.setItem "auth." + app.sessionName + ".token", app._auth
+            app.fire "app-login.login"
             return
         test.fail () ->
             app._user = old_user
             app._auth = old_auth
             $(app).find(".panel").animateCss 'flash'
             return
+        test.always () ->
+            app._loading = false
+            app.fire "app-login.loading"
+            return
         this
 
     ### @public ###
     authorize: (req) ->
-        this._loading = true
         app = this
         req.crossDomain = true
         req.cache = false
@@ -74,22 +79,25 @@ Polymer
         test.fail (xhr, status, err) ->
             app._defaultFailure xhr, status, err
             return
-        test.always () ->
-            app._loading = false
-            return
         test
 
     ### @public ###
     logout: () ->
+        if this._loading then return this
         this._loading = true
+        this.fire "app-login.loading"
         app = this
         test = this.authorize url: "/molecules/app-login/logout"
         test.done () ->
-            localStorage.setItem "auth.user", ""
-            localStorage.setItem "auth.token", ""
-            app._auth = ""
+            localStorage.setItem "auth." + app.sessionName + ".user", ""
+            localStorage.setItem "auth." + app.sessionName + ".token", ""
             app._user = "null"
-            app._loginWindow()
+            app._auth = ""
+            app.fire "app-login.logout"
+            return
+        test.always () ->
+            app._loading = false
+            app.fire "app-login.loading"
             return
         this
 
@@ -116,23 +124,54 @@ Polymer
         app = this
         this._user = "null"
         this._auth = ""
-        authUser = localStorage.getItem "auth.user"
-        authToken = localStorage.getItem "auth.token"
-        if authUser and authToken
-            this._user = authUser
-            this._auth = authToken
-            test = this.authorize url: "/molecules/app-login/test"
-            test.done () ->
+        authUser = localStorage.getItem "auth." + this.sessionName + ".user"
+        authToken = localStorage.getItem "auth." + this.sessionName + ".token"
+
+        document.addEventListener "app-login.login", (e) ->
+            if e.target.sessionName is app.sessionName
+                app._user = e.target._user
+                app._auth = e.target._auth
                 app._logoutWindow()
-                return
-            test.fail () ->
-                app._user = "null"
-                app._auth = ""
-                return
+            return
+
+        document.addEventListener "app-login.logout", (e) ->
+            if e.target.sessionName is app.sessionName
+                app._user = e.target._user
+                app._auth = e.target._auth
+                app._loginWindow()
+            return
+
+        document.addEventListener "app-login.loading", (e) ->
+            if e.target.sessionName is app.sessionName
+                app._loading = e.target._loading
+            return
+
+        this.async () ->
+            if authUser and authToken and not this._loading
+                this._loading = true
+                this.fire "app-login.loading"
+                this._user = authUser
+                this._auth = authToken
+                test = this.authorize url: "/molecules/app-login/test"
+                test.done () ->
+                    app.fire "app-login.login"
+                    return
+                test.fail () ->
+                    app._user = "null"
+                    app._auth = ""
+                    return
+                test.always () ->
+                    app._loading = false
+                    app.fire "app-login.loading"
+                    return
         return
     
     properties:
         model:
             type: String
             value: "molecules/app-login/models/login"
+            notify: true
+        sessionName:
+            type: String
+            value: "default"
             notify: true

@@ -1,22 +1,31 @@
 Polymer
     is: 'app-user-preference'
 
-    ### @public ###
-    get: () ->
-        userPref = $(this.login)[0].authorize
-            url: "/molecules/app-user-preference/getPreferences",
-            headers: {"app-user-preference": this.model}
-        userPref.done (data) ->
-            console.log data
+    ### @override ###
+    ready: () ->
+        app = this
+        this.preferences = []
+        document.addEventListener "app-login.login", (e) ->
+            if e.target.sessionName is app.sessionName
+                userPref = e.target.authorize
+                    url: "/molecules/app-user-preference/getPreferences",
+                    headers: {"app-user-preference": app.model}
+                userPref.done (data) ->
+                    app.preferences = data
+                    return
             return
-        this
+        document.addEventListener "app-login.logout", (e) ->
+            if e.target.sessionName is app.sessionName
+                app.preferences = []
+            return
+        return
 
     properties:
         model:
             type: String
             value: "molecules/app-user-preference/models/user-preference"
             notify: true
-        login:
+        sessionName:
             type: String
-            value: "app-login"
+            value: "default"
             notify: true

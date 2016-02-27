@@ -4,6 +4,7 @@ block css
     style.
         :host{display:block;width:350px;}
         .panel-heading{text-align:center;}
+        .label{margin-right:10px;}
 
 block js
     script(src="#{url('controllers/script.coffee')}")
@@ -13,4 +14,9 @@ block molecules
 block content
     .panel.panel-primary
         .panel-heading User Preferences
-        .panel-body Please login to add/view your preferences
+        template(is="dom-if", if="{{!preferences.length}}")
+            .panel-body Please login to add/view your preferences
+        template(is="dom-if", if="{{preferences.length}}")
+            .panel-body
+                template(is="dom-repeat", items="{{preferences}}")
+                    span.label.label-warning {{item.preference}}

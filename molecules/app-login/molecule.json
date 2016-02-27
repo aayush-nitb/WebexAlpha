@@ -5,7 +5,8 @@
   "author": "aayush.nitb@gmail.com",
   "dependencies": {},
   "attrs": {
-    "model": ["string", "molecules/app-login/models/login", "Optional json path wrt app root, to specify db details."]
+    "model": ["string", "molecules/app-login/models/login", "Optional json path wrt app root, to specify db details."],
+    "sessionName": ["string", "default", "Use this attr when you want to maintain multiple sessions within an app."]
   },
   "model": {
     "server": ["string", "localhost:27017", "Name of server where db is hosted."],
@@ -14,7 +15,11 @@
     "db_pass": ["string", "", "Password for connecting db."],
     "collection": ["string", "users", "Name of collection where user objects should be stored."]
   },
-  "events": {},
+  "events": {
+    "login": "Triggers when login is successful where event.detail = reference to this object.",
+    "logout": "Triggers when the user is logged-out where event.detail = reference to this object.",
+    "loading": "Triggers when the authorize request is called and when the request completes."
+  },
   "methods": {
     "login(user, password)": "This will open a user session at server end for 24 hrs.",
     "authorize(req)": "This is a wrapper of jquery ajax function containing in-built headers for authentication. It returns jqXHR object. req is ajax settings.",
