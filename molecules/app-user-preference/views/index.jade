@@ -4,7 +4,11 @@ block css
     style.
         :host{display:block;width:350px;}
         .panel-heading{text-align:center;}
+        .panel-heading .action{float:right;font-size:24px;line-height:20px;cursor:pointer;display:none;}
         .label{margin-right:10px;}
+        .panel-body{display:none;}
+        .btn-group{float:right;}
+        h4{margin-top:0px;}
 
 block js
     script(src="#{url('controllers/script.coffee')}")
@@ -13,10 +17,19 @@ block molecules
 
 block content
     .panel.panel-primary
-        .panel-heading User Preferences
-        template(is="dom-if", if="{{!preferences.length}}")
-            .panel-body Please login to add/view your preferences
-        template(is="dom-if", if="{{preferences.length}}")
-            .panel-body
-                template(is="dom-repeat", items="{{preferences}}")
-                    span.label.label-warning {{item.preference}}
+        .panel-heading
+            span User Preferences
+            .action(on-click="_add") +
+        #view-login.panel-body Please login to add/view your preferences
+        #view-empty.panel-body You have no preferences yet. Click on plus to add one.
+        #view-list.panel-body
+            template(is="dom-repeat", items="{{preferences}}")
+                span.label.label-warning {{item.preference}}
+        #view-add.panel-body
+            h4 Add Preference
+            form
+                .form-group
+                    input.form-control#new(type="text", placeholder="music, traveling...")
+                .btn-group
+                    button.btn.btn-default(type="button", on-click="_cancel") Cancel
+                    button.btn.btn-primary(type="submit", on-click="_add_done") Done

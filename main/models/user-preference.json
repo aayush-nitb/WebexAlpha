@@ -3,5 +3,5 @@
   "db": "webmatrix",
   "db_user": "",
   "db_pass": "",
-  "collection": "users"
+  "collection": "user-preference"
 }
