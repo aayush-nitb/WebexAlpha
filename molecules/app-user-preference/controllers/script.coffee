@@ -50,7 +50,7 @@ Polymer
                     app.preferences = data
                     app._window 'list'
                     return
-                this.login = e.target
+                app.login = e.target
             return
         document.addEventListener "app-login.logout", (e) ->
             if e.target.sessionName is app.sessionName

@@ -27,9 +27,8 @@ block content
                 span.label.label-warning {{item.preference}}
         #view-add.panel-body
             h4 Add Preference
-            form
-                .form-group
-                    input.form-control#new(type="text", placeholder="music, traveling...")
-                .btn-group
-                    button.btn.btn-default(type="button", on-click="_cancel") Cancel
-                    button.btn.btn-primary(type="submit", on-click="_add_done") Done
+            .form-group
+                input.form-control#new(type="text", placeholder="music, traveling...")
+            .btn-group
+                button.btn.btn-default(on-click="_cancel") Cancel
+                button.btn.btn-primary(on-click="_add_done") Done
