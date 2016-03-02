@@ -6,6 +6,7 @@ require('wiredep')({
 });
 
 var express = require('express')
+    , bodyParser = require('body-parser')
     , routes = require('./routes')
     , http = require('http')
     , fs = require('fs')
@@ -72,6 +73,8 @@ app.set('view engine', 'jade');
 app.use('/node_modules', express.static(path.join(__dirname, 'node_modules')));
 app.use('/bower_components', express.static(path.join(__dirname, 'bower_components')));
 app.use('/public', express.static(path.join(__dirname, 'public')));
+app.use(bodyParser.urlencoded({extended: false}))
+app.use(bodyParser.json())
 
 var mainAppearance = fileRegex("main", "appearance", "less");
 var moleculeAppearance = fileRegex("molecules", "appearance", "less");

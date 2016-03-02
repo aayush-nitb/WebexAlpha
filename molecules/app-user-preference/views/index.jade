@@ -3,12 +3,14 @@ extends layout
 block css
     style.
         :host{display:block;width:350px;}
+        h4{margin-top:0px;}
+        #view-list{display:flex;flex-flow:row wrap;padding-bottom:5px;padding-right:5px;}
         .panel-heading{text-align:center;}
-        .panel-heading .action{float:right;font-size:24px;line-height:20px;cursor:pointer;display:none;}
-        .label{margin-right:10px;}
+        .panel-heading .action{float:right;font-size:1.7em;line-height:20px;cursor:pointer;display:none;}
+        .label{margin-right:10px;margin-bottom:10px;font-size:0.9em;color:#777;flex-grow:1;}
+        .label .glyphicon{font-size:0.9em;color:white;cursor:pointer;float:right;}
         .panel-body{display:none;}
         .btn-group{float:right;}
-        h4{margin-top:0px;}
 
 block js
     script(src="#{url('controllers/script.coffee')}")
@@ -24,7 +26,8 @@ block content
         #view-empty.panel-body You have no preferences yet. Click on plus to add one.
         #view-list.panel-body
             template(is="dom-repeat", items="{{preferences}}")
-                span.label.label-warning {{item.preference}}
+                span.label.label-warning {{item.preference}}&nbsp;&nbsp;&nbsp;
+                    span.glyphicon.glyphicon-remove-sign
         #view-add.panel-body
             h4 Add Preference
             .form-group
