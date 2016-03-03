@@ -19,6 +19,7 @@ Polymer
             data: preference: $(e.target).data "id"
         userPref.done (data) ->
             app.preferences = data
+            app._window 'list'
             return
         return
 
