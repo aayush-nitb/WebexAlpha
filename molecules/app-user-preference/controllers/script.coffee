@@ -10,6 +10,19 @@ Polymer
         this._window 'add'
 
     ### @private ###
+    _remove: (e) ->
+        app = this
+        userPref = this.login.authorize
+            method: 'DELETE'
+            url: "/molecules/app-user-preference/preferences",
+            headers: {"app-user-preference": app.model}
+            data: preference: $(e.target).data "id"
+        userPref.done (data) ->
+            app.preferences = data
+            return
+        return
+
+    ### @private ###
     _add_done: () ->
         app = this
         userPref = this.login.authorize

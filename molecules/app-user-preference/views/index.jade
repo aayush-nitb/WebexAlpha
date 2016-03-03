@@ -27,7 +27,7 @@ block content
         #view-list.panel-body
             template(is="dom-repeat", items="{{preferences}}")
                 span.label.label-warning {{item.preference}}&nbsp;&nbsp;&nbsp;
-                    span.glyphicon.glyphicon-remove-sign
+                    span.glyphicon.glyphicon-remove-sign(data-id$="{{item._id}}", on-click="_remove")
         #view-add.panel-body
             h4 Add Preference
             .form-group
