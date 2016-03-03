@@ -23,7 +23,6 @@
     "express": "latest",
     "bower": "latest",
     "body-parser": "latest",
-    "mongodb": "latest",
     "mongoskin": "latest",
     "wiredep": "latest",
     "coffee-script": "latest",
