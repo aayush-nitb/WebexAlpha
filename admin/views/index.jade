@@ -1,0 +1,22 @@
+extends layout
+
+block css
+    link(rel='stylesheet', href="#{url('appearance/style.less')}")
+  
+block js
+    script(src="#{url('controllers/app.coffee')}")
+
+block molecules
+    link(rel="import", href="/molecules/admin-new-molecule")
+    link(rel="import", href="/molecules/app-login")
+
+block content
+    .container
+        #layer-navigation.col-md-3
+            .row: app-login.col-md-12(model="admin/models/login")
+            ul.nav.nav-pills.nav-stacked
+                li.active: a(href="javascript:alert(1)") Molecules
+                li: a(href="javascript:alert(1)") Docs
+        .col-md-9
+            .row
+                admin-new-molecule

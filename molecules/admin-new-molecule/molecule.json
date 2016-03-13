@@ -1,0 +1,13 @@
+{
+  "name": "admin-new-molecule",
+  "version": "0.0.1",
+  "description": "Allows admin to create a new molecule with minimum basic structure.",
+  "author": "aayush.nitb@gmail.com",
+  "dependencies": {
+    "app-login": "0.0.1"
+  },
+  "attrs": {},
+  "events": {},
+  "methods": {},
+  "middlewares": {}
+}

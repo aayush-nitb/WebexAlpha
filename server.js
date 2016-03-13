@@ -1,11 +1,7 @@
 require('coffee-script/register');
 
-require('wiredep')({
-    src: 'main/views/layout.jade',
-    ignorePath: '../..'
-});
-
 var express = require('express')
+    , wiredep = require('wiredep')
     , bodyParser = require('body-parser')
     , routes = require('./routes')
     , http = require('http')
@@ -15,6 +11,16 @@ var express = require('express')
     , coffee = require('coffee-script')
     , less = require('less')
     , path = require('path');
+
+wiredep({
+    src: 'main/views/layout.jade',
+    ignorePath: '../..'
+});
+
+wiredep({
+    src: 'admin/views/layout.jade',
+    ignorePath: '../..'
+});
 
 var fileProvider = function(file){
     if(file.match("^/?appearance/")){
@@ -76,29 +82,21 @@ app.use('/public', express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.urlencoded({extended: false}))
 app.use(bodyParser.json())
 
-var mainAppearance = fileRegex("main", "appearance", "less");
-var moleculeAppearance = fileRegex("molecules", "appearance", "less");
-var mainController = fileRegex("main", "controllers", "coffee");
-var moleculeController = fileRegex("molecules", "controllers", "coffee");
 var mainService = fileRegex("main", "services", "coffee", "index");
+var adminService = fileRegex("admin", "services", "coffee", "index");
 var moleculeService = fileRegex("molecules", "services", "coffee", "index");
 
-var mainAppearance_rendered = fileRegex("main", "appearance", "css");
-var moleculeAppearance_rendered = fileRegex("molecules", "appearance", "css");
-var mainController_rendered = fileRegex("main", "controllers", "js");
-var moleculeController_rendered = fileRegex("molecules", "controllers", "js");
-
-["main", "molecules"].forEach(function (srcCode) {
+["main", "admin", "molecules"].forEach(function (srcCode) {
     var molecules = walk.walk(srcCode, { followLinks: false });
     molecules.on('file', function (root, stat, next) {
         var filename = path.join(root, stat.name);
-        if (filename.match(mainController) || filename.match(moleculeController)) {
+        if (filename.match(fileRegex(srcCode, "controllers", "coffee"))) {
             render("js", filename, function (data, outfile) {
                 var compiled = coffee.compile(data);
                 write(compiled, root, outfile);
             });
         }
-        if (filename.match(mainAppearance) || filename.match(moleculeAppearance)) {
+        if (filename.match(fileRegex(srcCode, "appearance", "less"))) {
             render("css", filename, function (data, outfile) {
                 less.render(data).then(function (compiled) {
                     write(compiled.css, root, outfile);
@@ -108,17 +106,20 @@ var moleculeController_rendered = fileRegex("molecules", "controllers", "js");
         if (filename.match(mainService)) {
             app.use("/", require("./main/services/index"));
         }
+        if (filename.match(adminService)) {
+            app.use("/admin", require("./admin/services/index"));
+        }
         if (filename.match(moleculeService)) {
             var service_path = new RegExp(moleculeService);
             var match = service_path.exec(filename);
             app.use("/molecules/" + match[1], require("./molecules/" + match[1] + "/services/index"));
         }
-        if (filename.match(mainController_rendered) || filename.match(moleculeController_rendered)) {
+        if (filename.match(fileRegex(srcCode, "controllers", "js"))) {
             render("js", filename, function (data, outfile) {
                 write(data, root, outfile);
             });
         }
-        if (filename.match(mainAppearance_rendered) || filename.match(moleculeAppearance_rendered)) {
+        if (filename.match(fileRegex(srcCode, "appearance", "css"))) {
             render("css", filename, function (data, outfile) {
                 write(data, root, outfile);
             });
