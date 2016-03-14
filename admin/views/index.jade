@@ -12,11 +12,12 @@ block molecules
 
 block content
     .container
-        #layer-navigation.col-md-3
+        #bg-for-navigation.col-md-3
+        #navigation.col-md-3
             .row: app-login.col-md-12(model="admin/models/login")
             ul.nav.nav-pills.nav-stacked
-                li.active: a(href="javascript:alert(1)") Molecules
-                li: a(href="javascript:alert(1)") Docs
+                li.active: a(href="javascript:null") Molecules
+                li: a(href="javascript:null") Docs
         .col-md-9
-            .row
+            .row: .col-md-12
                 admin-new-molecule

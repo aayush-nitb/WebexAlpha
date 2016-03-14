@@ -2,7 +2,8 @@ extends layout
 
 block css
     style.
-        :host{display:block;width:350px;}
+        :host{display:block;}
+        td{cursor:pointer;}
 
 block js
     script(src="#{url('controllers/script.coffee')}")
@@ -10,3 +11,30 @@ block js
 block molecules
 
 block content
+    h1.text-warning Molecules
+        small &nbsp; Select molecule to configure
+    table.table.table-hover
+        tr
+            td(on-mouseover="_showActions"): h4 app-seed
+            td(on-mouseover="_showActions")
+                .dropdown.pull-right
+                    button#showActions.btn.btn-default.dropdown-toggle(type="button", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false") Actions &nbsp;
+                        span.caret
+                    ul.dropdown-menu(role="menu", aria-labelledby="showActions")
+                        li: a(href="javascript:null") Action
+                        li: a(href="javascript:null") Another action
+                        li: a(href="javascript:null") Something else here
+                        li(role="separator", class="divider")
+                        li: a(href="javascript:null") Separated link
+        tr
+            td(on-mouseover="_showActions"): h4 app-login
+            td(on-mouseover="_showActions")
+                .dropdown.pull-right
+                    button#showActions.btn.btn-default.dropdown-toggle(type="button", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false") Actions &nbsp;
+                        span.caret
+                    ul.dropdown-menu(role="menu", aria-labelledby="showActions")
+                        li: a(href="javascript:null") Action
+                        li: a(href="javascript:null") Another action
+                        li: a(href="javascript:null") Something else here
+                        li(role="separator", class="divider")
+                        li: a(href="javascript:null") Separated link

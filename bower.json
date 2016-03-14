@@ -13,6 +13,7 @@
     "angular-ui-router": "#master",
     "angular-ui-select": "latest",
     "angular-sanitize": "latest",
-    "polymer": "Polymer/polymer#^1.2.0"
+    "polymer": "Polymer/polymer#^1.2.0",
+    "bootstrap-contextmenu": "latest"
   }
 }
