@@ -3,33 +3,20 @@ rfr = require 'rfr'
 models = rfr 'models'
 router = express.Router()
 ObjectID = require('mongoskin').ObjectID
+path = require 'path'
+walk = require 'walk'
 
+appRoot = path.resolve "."
 login = rfr 'molecules/app-login/services/login'
 
-router.get '/preferences', login.auth, (req, res) ->
-    db = models(req.get 'app-user-preference').db()
-    db.find(user: login.user()).toArray (err, result) ->
-        res.json result
+router.get '/molecule', login.auth, (req, res) ->
+    molecules = walk.walk appRoot + "/molecules", followLinks:false
+    molecules.on 'directories', (root, dirs, next) ->
+        res.json dirs
     return
 
-router.post '/preferences', login.auth, (req, res) ->
-    db = models(req.get 'app-user-preference').db()
-    db.insert {
-        user: login.user()
-        preference: req.body.preference
-    }, (err, result) ->
-        db.find(user: login.user()).toArray (err, result) ->
-            res.json result
-    return
-
-router.delete '/preferences', login.auth, (req, res) ->
-    db = models(req.get 'app-user-preference').db()
-    db.remove {
-        user: login.user()
-        _id: new ObjectID(req.body.preference)
-    }, (err, result) ->
-        db.find(user: login.user()).toArray (err, result) ->
-            res.json result
+router.post '/molecule', login.auth, (req, res) ->
+    res.json [{name:"app-seed"}, {name:"app-login"}]
     return
 
 module.exports = router
