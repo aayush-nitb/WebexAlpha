@@ -3,6 +3,7 @@ extends layout
 block css
     style.
         :host{display:block;}
+        .dropdown{display:none;}
         td{cursor:pointer;}
 
 block js
@@ -13,28 +14,17 @@ block molecules
 block content
     h1.text-warning Molecules
         small &nbsp; Select molecule to configure
-    table.table.table-hover
-        tr
-            td(on-mouseover="_showActions"): h4 app-seed
-            td(on-mouseover="_showActions")
-                .dropdown.pull-right
-                    button#showActions.btn.btn-default.dropdown-toggle(type="button", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false") Actions &nbsp;
-                        span.caret
-                    ul.dropdown-menu(role="menu", aria-labelledby="showActions")
-                        li: a(href="javascript:null") Action
-                        li: a(href="javascript:null") Another action
-                        li: a(href="javascript:null") Something else here
-                        li(role="separator", class="divider")
-                        li: a(href="javascript:null") Separated link
-        tr
-            td(on-mouseover="_showActions"): h4 app-login
-            td(on-mouseover="_showActions")
-                .dropdown.pull-right
-                    button#showActions.btn.btn-default.dropdown-toggle(type="button", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false") Actions &nbsp;
-                        span.caret
-                    ul.dropdown-menu(role="menu", aria-labelledby="showActions")
-                        li: a(href="javascript:null") Action
-                        li: a(href="javascript:null") Another action
-                        li: a(href="javascript:null") Something else here
-                        li(role="separator", class="divider")
-                        li: a(href="javascript:null") Separated link
+    template(is="dom-repeat", items="{{_list}}")
+        table.table.table-hover
+            tr(on-mouseover="_showActions", on-mouseout="_hideActions")
+                td: h4 {{item.name}}
+                td
+                    .dropdown.pull-right
+                        button#showActions.btn.btn-default.dropdown-toggle(type="button", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false") Actions &nbsp;
+                            span.caret
+                        ul.dropdown-menu(role="menu", aria-labelledby="showActions")
+                            li: a(href="javascript:null") Action
+                            li: a(href="javascript:null") Another action
+                            li: a(href="javascript:null") Something else here
+                            li(role="separator", class="divider")
+                            li: a(href="javascript:null") Separated link

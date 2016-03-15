@@ -3,5 +3,16 @@ Polymer
 
     ### @private ###
     _showActions: (e) ->
-        $(this).find(".dropdown").css "display", "none"
-        $(e.target).parent("tr").find(".dropdown").css "display", "block"
+        $(e.target).parents("tr").find(".dropdown").show()
+
+    ### @private ###
+    _hideActions: (e) ->
+        $(e.target).parents("tr").find(".dropdown").hide()
+
+    ### @override ###
+    ready: ->
+        app = this
+        app._list = [{name:"app-seed"}, {name:"app-login"}]
+        # molecule = $.get "/molecules/admin-new-molecule/molecule"
+        # molecule.done (data) ->
+        #   app._list = data
