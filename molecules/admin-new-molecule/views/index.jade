@@ -1,6 +1,7 @@
 extends layout
 
 block css
+    link(rel="stylesheet", href="#{url('appearance/animate.css')}")
     style.
         :host{display:block;}
         .dropdown,.view{display:none;}
@@ -8,6 +9,7 @@ block css
         td{cursor:pointer;}
 
 block js
+    script(src="#{url('controllers/animate.js')}")
     script(src="#{url('controllers/script.coffee')}")
 
 block molecules
@@ -15,9 +17,17 @@ block molecules
 block content
     #view-none.view
         .alert.alert-warning(role="alert")
-            big.glyphicon.glyphicon-exclamation-sign &nbsp; 
+            big.glyphicon.glyphicon-exclamation-sign &nbsp;
             span Please login to access admin controls
     #view-list.view
+        #view-warning.view
+            .alert.alert-warning(role="alert")
+                big.glyphicon.glyphicon-exclamation-sign &nbsp;
+                span {{_message}}
+        #view-success.view
+            .alert.alert-success(role="alert")
+                big.glyphicon.glyphicon-ok &nbsp;
+                span {{_message}}
         h1.text-warning Molecules
             small &nbsp; Select molecule to configure
             .action.pull-right(on-click="_add") +
@@ -36,7 +46,7 @@ block content
             .action.pull-right(on-click="_closeAction") &times;
         .form-group
                 h4 Name
-                input.form-control#new(type="text", placeholder="app-seed, myapp-task ...")
+                input.form-control#input-name(type="text", placeholder="app-seed, myapp-task ...")
             .btn-group
                 button.btn.btn-default(on-click="_closeAction") Cancel
                 button.btn.btn-primary(on-click="_add_done") Done
@@ -45,7 +55,7 @@ block content
             .action.pull-right(on-click="_closeAction") &times;
         .form-group
                 h4 Rename
-                input.form-control(type="text", value$="{{_molecule}}")
+                input.form-control#input-name(type="text", value$="{{_molecule}}")
             .btn-group
                 button.btn.btn-default(on-click="_closeAction") Cancel
                 button.btn.btn-primary(on-click="_rename_done") Done

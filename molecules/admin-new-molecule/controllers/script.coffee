@@ -20,11 +20,11 @@ Polymer
     ### @private ###
     _closeAction: (e) ->
         this._window 'list'
-        $(this).find("#new").val ""
         return
 
     ### @private ###
     _add: (e) ->
+        $(this).find("#view-add #input-name").val ""
         this._window 'add'
         return
 
@@ -35,11 +35,41 @@ Polymer
         return
 
     ### @private ###
+    _alert: (message, error) ->
+        this._message = message
+        view = if error then 'warning' else 'success'
+        alert = $(this).find "#view-list #view-" + view
+        alert.show().delay(5000).slideUp()
+        return
+
+    ### @private ###
     _add_done: (e) ->
+        app = this
+        molecule = this.login.authorize
+            method: 'POST'
+            url: "/molecules/admin-new-molecule/molecule",
+            data: name: $(this).find("#view-add #input-name").val()
+        molecule.done (res) ->
+            app._window 'list'
+            if res.success
+                app._list = res.data
+                app._alert "New molecule created"
+            else
+                app._alert res.error, true
+            return
         return
 
     ### @private ###
     _rename_done: (e) ->
+        app = this
+        molecule = this.login.authorize
+            method: 'POST'
+            url: "/molecules/admin-new-molecule/molecule/" + this._molecule,
+            data: name: $(this).find("#view-rename #input-name").val()
+        molecule.done (res) ->
+            if res.success then app._list = res.data
+            app._window 'list'
+            return
         return
 
     ### @override ###
@@ -52,8 +82,8 @@ Polymer
                 app._window 'list'
                 molecule = e.target.authorize
                     url: "/molecules/admin-new-molecule/molecule"
-                molecule.done (data) ->
-                    app._list = data
+                molecule.done (res) ->
+                    if res.success then app._list = res.data
                     return
                 app.login = e.target
             return
