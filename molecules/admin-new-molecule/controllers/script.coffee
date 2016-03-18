@@ -25,6 +25,8 @@ Polymer
     ### @private ###
     _add: (e) ->
         $(this).find("#view-add #input-name").val ""
+        $(this).find("#view-add #input-description").val ""
+        $(this).find("#view-add #input-version").val "0.0.1"
         this._window 'add'
         return
 
@@ -48,7 +50,11 @@ Polymer
         molecule = this.login.authorize
             method: 'POST'
             url: "/molecules/admin-new-molecule/molecule",
-            data: name: $(this).find("#view-add #input-name").val()
+            data:
+                name: $(this).find("#view-add #input-name").val()
+                description: $(this).find("#view-add #input-description").val()
+                version: $(this).find("#view-add #input-version").val()
+                author: $(this).find("#view-add #input-author").val()
         molecule.done (res) ->
             app._window 'list'
             if res.success

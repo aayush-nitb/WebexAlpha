@@ -6,7 +6,9 @@ block css
         :host{display:block;}
         .dropdown,.view{display:none;}
         .action{cursor:pointer;}
+        .btn-group{margin-top:20px;}
         td{cursor:pointer;}
+        h5{margin:20px 0 5px 2px;font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:1.1em;letter-spacing:-0.1px;}
 
 block js
     script(src="#{url('controllers/animate.js')}")
@@ -45,8 +47,14 @@ block content
         h2.text-warning Create Molecule
             .action.pull-right(on-click="_closeAction") &times;
         .form-group
-                h4 Name
-                input.form-control#input-name(type="text", placeholder="app-seed, myapp-task ...")
+            h5 Name
+            input.form-control#input-name(type="text", placeholder="myapp-molecule-name")
+            h5 Description
+            input.form-control#input-description(type="text", placeholder="what does this molecule do?")
+            h5 Version
+            input.form-control#input-version(type="text", placeholder="0.0.1")
+            h5 Author Email
+            input.form-control#input-author(type="text", placeholder="author@xyz.com")
             .btn-group
                 button.btn.btn-default(on-click="_closeAction") Cancel
                 button.btn.btn-primary(on-click="_add_done") Done
@@ -54,8 +62,8 @@ block content
         h2.text-warning {{_molecule}}
             .action.pull-right(on-click="_closeAction") &times;
         .form-group
-                h4 Rename
-                input.form-control#input-name(type="text", value$="{{_molecule}}")
+            h5 Rename
+            input.form-control#input-name(type="text", value$="{{_molecule}}")
             .btn-group
                 button.btn.btn-default(on-click="_closeAction") Cancel
                 button.btn.btn-primary(on-click="_rename_done") Done
