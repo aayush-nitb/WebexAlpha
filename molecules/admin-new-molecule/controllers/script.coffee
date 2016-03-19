@@ -37,10 +37,10 @@ Polymer
         return
 
     ### @private ###
-    _alert: (message, error) ->
+    _alert: (window, message, error) ->
         this._message = message
         view = if error then 'warning' else 'success'
-        alert = $(this).find "#view-list #view-" + view
+        alert = $(this).find "#view-" + window + " #view-" + view
         alert.show().delay(5000).slideUp()
         return
 
@@ -55,13 +55,14 @@ Polymer
                 description: $(this).find("#view-add #input-description").val()
                 version: $(this).find("#view-add #input-version").val()
                 author: $(this).find("#view-add #input-author").val()
+                indent: $(this).find("#view-add #input-indent .active input").val()
         molecule.done (res) ->
-            app._window 'list'
             if res.success
+                app._window 'list'
                 app._list = res.data
-                app._alert "New molecule created"
+                app._alert "list", "New molecule created"
             else
-                app._alert res.error, true
+                app._alert "add", res.error, true
             return
         return
 

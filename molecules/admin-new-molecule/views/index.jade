@@ -6,7 +6,7 @@ block css
         :host{display:block;}
         .dropdown,.view{display:none;}
         .action{cursor:pointer;}
-        .btn-group{margin-top:20px;}
+        #input-submit{margin-top:20px;}
         td{cursor:pointer;}
         h5{margin:20px 0 5px 2px;font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:1.1em;letter-spacing:-0.1px;}
 
@@ -22,10 +22,6 @@ block content
             big.glyphicon.glyphicon-exclamation-sign &nbsp;
             span Please login to access admin controls
     #view-list.view
-        #view-warning.view
-            .alert.alert-warning(role="alert")
-                big.glyphicon.glyphicon-exclamation-sign &nbsp;
-                span {{_message}}
         #view-success.view
             .alert.alert-success(role="alert")
                 big.glyphicon.glyphicon-ok &nbsp;
@@ -44,6 +40,10 @@ block content
                             ul.dropdown-menu(role="menu", aria-labelledby="showActions")
                                 li: a(href="javascript:null", on-click="_rename", data-id$="{{item.name}}") Rename
     #view-add.view
+        #view-warning.view
+            .alert.alert-warning(role="alert")
+                big.glyphicon.glyphicon-exclamation-sign &nbsp;
+                span {{_message}}
         h2.text-warning Create Molecule
             .action.pull-right(on-click="_closeAction") &times;
         .form-group
@@ -55,9 +55,22 @@ block content
             input.form-control#input-version(type="text", placeholder="0.0.1")
             h5 Author Email
             input.form-control#input-author(type="text", placeholder="author@xyz.com")
-            .btn-group
-                button.btn.btn-default(on-click="_closeAction") Cancel
-                button.btn.btn-primary(on-click="_add_done") Done
+            h5 Indentation
+            #input-indent
+                .btn-group(data-toggle="buttons")
+                    label.btn.btn-default.active
+                        input(value="    ", type="radio", name="options", autocomplete="off", checked)
+                        span 4 spaces
+                    label.btn.btn-default
+                        input(value="  ", type="radio", name="options", autocomplete="off")
+                        span 2 spaces
+                    label.btn.btn-default
+                        input(value="\t", type="radio", name="options", autocomplete="off")
+                        span tab space
+            #input-submit
+                .btn-group.pull-right
+                    button.btn.btn-default(on-click="_closeAction") Cancel
+                    button.btn.btn-primary(on-click="_add_done") Done
     #view-rename.view
         h2.text-warning {{_molecule}}
             .action.pull-right(on-click="_closeAction") &times;
