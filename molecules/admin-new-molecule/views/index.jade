@@ -77,6 +77,7 @@ block content
         .form-group
             h5 Rename
             input.form-control#input-name(type="text", value$="{{_molecule}}")
-            .btn-group
-                button.btn.btn-default(on-click="_closeAction") Cancel
-                button.btn.btn-primary(on-click="_rename_done") Done
+            #input-submit
+                .btn-group.pull-right
+                    button.btn.btn-default(on-click="_closeAction") Cancel
+                    button.btn.btn-primary(on-click="_rename_done") Done
