@@ -1,0 +1,13 @@
+{
+    "name": "webex-game-card",
+    "version": "0.0.1",
+    "description": "This implements a game card mapped on server",
+    "author": "aayush.nitb@gmail.com",
+    "dependencies": {},
+    "attrs": {},
+    "events": {},
+    "methods": {},
+    "middlewares": {},
+    "model": {},
+    "services": []
+}

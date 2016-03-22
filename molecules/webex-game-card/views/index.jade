@@ -1,0 +1,17 @@
+extends layout
+
+block css
+    style.
+        :host{
+            display:block;
+            background-image:url('#{url("images/card-back-blue.png")}');
+            background-position: 0 0;
+            background-size: 100% 100%;
+        }
+
+block js
+    script(src="#{url('controllers/script.coffee')}")
+
+block molecules
+
+block content

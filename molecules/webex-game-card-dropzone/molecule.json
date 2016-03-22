@@ -1,0 +1,13 @@
+{
+    "name": "webex-game-card-dropzone",
+    "version": "0.0.1",
+    "description": "Allows a card to drop over this molecule",
+    "author": "aayush.nitb@gmail.com",
+    "dependencies": {},
+    "attrs": {},
+    "events": {},
+    "methods": {},
+    "middlewares": {},
+    "model": {},
+    "services": []
+}

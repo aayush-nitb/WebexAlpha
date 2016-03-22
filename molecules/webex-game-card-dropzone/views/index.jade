@@ -1,0 +1,14 @@
+extends layout
+
+block css
+    style.
+        :host{display:block;}
+        .visible{border-radius:10%;background:repeating-linear-gradient(45deg,#ccc,#ccc 3px,#eee 3px,#eee 6px);}
+
+block js
+    script(src="#{url('controllers/script.coffee')}")
+
+block molecules
+
+block content
+    content

@@ -7,15 +7,23 @@ block js
     script(src="#{url('controllers/app.coffee')}")
 
 block molecules
-    link(rel="import", href="/molecules/app-user-preference")
+    link(rel="import", href="/molecules/webex-game-card")
     link(rel="import", href="/molecules/app-login")
-    link(rel="import", href="/molecules/app-seed")
 
 block content
     .container
-        .row
-            app-login.col-md-3(model="main/models/login")
-            app-login.col-md-3(model="main/models/login")
-            app-user-preference.col-md-3(model="main/models/user-preference")
-        .row
-            app-seed.col-md-12
+        #bg-for-navigation.col-md-3
+        #navigation.col-md-3
+            .row: app-login.col-md-12(model="main/models/app-login")
+        .col-md-9
+            .row: .col-md-12
+                .col-md-6: .row
+                    webex-game-card.col-md-3(model="main/models/game-card")
+                    webex-game-card.col-md-3(model="main/models/game-card")
+                    webex-game-card.col-md-3(model="main/models/game-card")
+                    webex-game-card.col-md-3(model="main/models/game-card")
+                .col-md-6: .row
+                    webex-game-card.col-md-3(model="main/models/game-card")
+                    webex-game-card.col-md-3(model="main/models/game-card")
+                    webex-game-card.col-md-3(model="main/models/game-card")
+                    webex-game-card.col-md-3(model="main/models/game-card")
